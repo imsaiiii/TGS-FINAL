@@ -1,4 +1,3 @@
-
 <!doctype html>
 <html lang="en">
 
@@ -12,22 +11,19 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 
   <!-- DataTables CSS -->
-    <link rel="stylesheet" href="https://cdn.datatables.net/2.1.8/css/dataTables.bootstrap5.css">
-    <script src = "https://code.jquery.com/jquery-3.7.1.js"></script>
-    <script src = "https://cdn.datatables.net/2.1.8/js/dataTables.js"></script>
-    <script src = "https://cdn.datatables.net/2.1.8/js/dataTables.bootstrap5.js"></script>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" />
-    <script>
-     $(document).ready(function () {
-    var table = $('#display').DataTable();
+  <link rel="stylesheet" href="https://cdn.datatables.net/2.1.8/css/dataTables.bootstrap5.css">
+  <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+  <script src="https://cdn.datatables.net/2.1.8/js/dataTables.js"></script>
+  <script src="https://cdn.datatables.net/2.1.8/js/dataTables.bootstrap5.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <script>
+    $(document).ready(function () {
+      var table = $('#myTable').DataTable();
 
-    // Function to add new data
-    function addData(newData) {
-        // Assuming newData is an array of data to be added
-        table.row.add(newData).draw(); // Add new data and redraw the table
-    }
-});
-    </script>
+    
+    });
+    
+  </script>
   <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
@@ -42,7 +38,7 @@
 </head>
 
 <body>
-<?php
+  <?php
   session_start();
   include('connection.php');
 
@@ -53,91 +49,92 @@
   $query_run = $conn->query($query);
   ?>
   <!-- Purchase Order Modal -->
-  <div class="modal fade" id="purchaseOrderModal" tabindex="-1" role="dialog" aria-labelledby="purchaseOrderLabel" aria-hidden="true">
+  <div class="modal fade" id="purchaseOrderModal" tabindex="-1" role="dialog" aria-labelledby="purchaseOrderLabel"
+    aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="purchaseOrderLabel">Purchase Order Details</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <p>Purchase Order Date and Time: <span id="transactionDate"><?php echo date("Y-m-d h:i:sa"); ?></span></p>
-                <p>Purchase Order Number: <span id="transactionNumber"></span></p>
-                <hr>
-
-              
-                <div class="form-group">
-                    <label for="supplier"><b>Supplier</b></label>
-                    <select class="form-control" id="supplier" name="supplier" required onchange="loadProducts()">
-                        <option value="">-- Select Supplier --</option>
-                        <<?php
-try {
-   
-    include 'connection.php';
-
-    
-    $stmt = $conn->query("SELECT supplier_name FROM suppliers");
-    $suppliers = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-   
-    foreach ($suppliers as $row) {
-        echo '<option value="' . htmlspecialchars($row['supplier_name']) . '">' . htmlspecialchars($row['supplier_name']) . '</option>';
-    }
-} catch (PDOException $e) {
-    
-    echo 'Error: ' . htmlspecialchars($e->getMessage());
-}
-?>
-                    </select>
-                </div>
-
-                <hr>
-                <div class="form-group">
-                    <label for="product"><b>Product:</b></label>
-                    <select class="form-control" id="product_list" name="product" required>
-                        <option value="">-- Select Product --</option>
-                    </select>
-                </div>
-
-                <!-- Quantity Input -->
-                <div class="form-group">
-                    <label for="product_qty"><b>Quantity:</b></label>
-                    <input type="number" id="product_qty" name="product_qty" class="form-control" min="1">
-                    <button id="btn_add" class="btn btn-primary mt-2" onclick="addProduct()">Add Product</button>
-                </div>
-
-                <!-- Product Table -->
-                <table id="display" class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th>Product</th>
-                            <th>Unit Price</th>
-                            <th>Quantity</th>
-                            <th>Supplier</th>
-                            <th>Amount</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
-
-             
-                <div class="d-flex justify-content-between">
-                    <strong>Total:</strong>
-                    <span id="total_price">0.00</span>
-                </div>
-            </div>
-
-            
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-primary" onclick="showPopupForm()">Continue</button>
-            </div>
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="purchaseOrderLabel">Purchase Order Details</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
         </div>
+        <div class="modal-body">
+          <p>Purchase Order Date and Time: <span id="transactionDate"><?php echo date("Y-m-d h:i:sa"); ?></span></p>
+          <p>Purchase Order Number: <span id="transactionNumber"></span></p>
+          <hr>
+
+
+          <div class="form-group">
+            <label for="supplier"><b>Supplier</b></label>
+            <select class="form-control" id="supplier" name="supplier" required onchange="loadProducts()">
+              <option value="">-- Select Supplier --</option>
+              <<?php
+              try {
+
+                include 'connection.php';
+
+
+                $stmt = $conn->query("SELECT supplier_name FROM suppliers");
+                $suppliers = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+
+                foreach ($suppliers as $row) {
+                  echo '<option value="' . htmlspecialchars($row['supplier_name']) . '">' . htmlspecialchars($row['supplier_name']) . '</option>';
+                }
+              } catch (PDOException $e) {
+
+                echo 'Error: ' . htmlspecialchars($e->getMessage());
+              }
+              ?>
+            </select>
+          </div>
+
+          <hr>
+          <div class="form-group">
+            <label for="product"><b>Product:</b></label>
+            <select class="form-control" id="product_list" name="product" required>
+              <option value="">-- Select Product --</option>
+            </select>
+          </div>
+
+          <!-- Quantity Input -->
+          <div class="form-group">
+            <label for="product_qty"><b>Quantity:</b></label>
+            <input type="number" id="product_qty" name="product_qty" class="form-control" min="1">
+            <button id="btn_add" class="btn btn-primary mt-2" onclick="addProduct()">Add Product</button>
+          </div>
+
+          <!-- Product Table -->
+          <table id="display" class="table table-striped">
+            <thead>
+              <tr>
+                <th>Product</th>
+                <th>Unit Price</th>
+                <th>Quantity</th>
+                <th>Supplier</th>
+                <th>Amount</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+
+
+          <div class="d-flex justify-content-between">
+            <strong>Total:</strong>
+            <span id="total_price">0.00</span>
+          </div>
+        </div>
+
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-primary" onclick="showPopupForm()">Continue</button>
+        </div>
+      </div>
     </div>
-</div>
+  </div>
 
   <!-- Confirmation Modal -->
   <div id="popupForm" class="modal fade" tabindex="-1" role="dialog">
@@ -162,72 +159,74 @@ try {
       </div>
     </div>
   </div>
-<!-- Edit Order Modal -->
-<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+  <!-- Edit Order Modal -->
+  <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel"
+    aria-hidden="true">
     <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="editModalLabel">Edit Purchase Order</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <input type="hidden" id="order_id">
-                <div class="form-group">
-                    <label for="po_number">PO Number</label>
-                    <input type="text" class="form-control" id="po_number" required>
-                </div>
-                <div class="form-group">
-                    <label for="product_name">Product Name</label>
-                    <input type="text" class="form-control" id="product_name" required>
-                </div>
-                <div class="form-group">
-                    <label for="quantity">Quantity</label>
-                    <input type="number" class="form-control" id="quantity" required>
-                </div>
-                <div class="form-group">
-                    <label for="unit_price">Unit Price</label>
-                    <input type="number" class="form-control" id="unit_price" required>
-                </div>
-                <div class="form-group">
-                    <label for="supplier_name">Supplier Name</label>
-                    <input type="text" class="form-control" id="supplier_name" required>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" id="update_order">Update Order</button>
-            </div>
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="editModalLabel">Edit Purchase Order</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
         </div>
+        <div class="modal-body">
+          <input type="hidden" id="order_id">
+          <div class="form-group">
+            <label for="po_number">PO Number</label>
+            <input type="text" class="form-control" id="po_number" required>
+          </div>
+          <div class="form-group">
+            <label for="product_name">Product Name</label>
+            <input type="text" class="form-control" id="product_name" required>
+          </div>
+          <div class="form-group">
+            <label for="quantity">Quantity</label>
+            <input type="number" class="form-control" id="quantity" required>
+          </div>
+          <div class="form-group">
+            <label for="unit_price">Unit Price</label>
+            <input type="number" class="form-control" id="unit_price" required>
+          </div>
+          <div class="form-group">
+            <label for="supplier_name">Supplier Name</label>
+            <input type="text" class="form-control" id="supplier_name" required>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" id="update_order">Update Order</button>
+        </div>
+      </div>
     </div>
-</div>
-<!-- View Order Modal -->
-<div class="modal fade" id="viewModal" tabindex="-1" role="dialog" aria-labelledby="viewModalLabel" aria-hidden="true">
+  </div>
+  <!-- View Order Modal -->
+  <div class="modal fade" id="viewModal" tabindex="-1" role="dialog" aria-labelledby="viewModalLabel"
+    aria-hidden="true">
     <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="viewModalLabel">View Purchase Order</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <p><strong>PO Number:</strong> <span id="view_po_number"></span></p>
-                <p><strong>Product Name:</strong> <span id="view_product_name"></span></p>
-                <p><strong>Quantity:</strong> <span id="view_quantity"></span></p>
-                <p><strong>Unit Price:</strong> <span id="view_unit_price"></span></p>
-                <p><strong>Supplier Name:</strong> <span id="view_supplier_name"></span></p>
-                <p><strong>Status:</strong> <span id="view_status"></span></p>
-                <p><strong>Created At:</strong> <span id="view_created_at"></span></p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            </div>
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="viewModalLabel">View Purchase Order</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
         </div>
+        <div class="modal-body">
+          <p><strong>PO Number:</strong> <span id="view_po_number"></span></p>
+          <p><strong>Product Name:</strong> <span id="view_product_name"></span></p>
+          <p><strong>Quantity:</strong> <span id="view_quantity"></span></p>
+          <p><strong>Unit Price:</strong> <span id="view_unit_price"></span></p>
+          <p><strong>Supplier Name:</strong> <span id="view_supplier_name"></span></p>
+          <p><strong>Status:</strong> <span id="view_status"></span></p>
+          <p><strong>Created At:</strong> <span id="view_created_at"></span></p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
     </div>
-</div>
- <div class="d-flex content">
+  </div>
+  <div class="d-flex content">
     <div id="sidebar" class="sidebar-color">
       <div class="sidebar-heading">
         <img src="images/Logo.jpg" alt="Bootstrap" class="logo">The Good Shots
@@ -267,7 +266,7 @@ try {
             <i class="fa-solid fa-calendar-days me-3"></i></i>Reports<i
               class="fa-solid fa-chevron-right toggle-arrow-reports" id="reports-arrow"></i>
           </a>
-           <div class="submenu" id="reports-submenu">
+          <div class="submenu" id="reports-submenu">
             <a href="discrepancy.php" class="sub-list-item">
               <p class="txt-name-btn">Supplier Report</p>
             </a>
@@ -347,58 +346,59 @@ try {
                     <th scope="col">Supplier</th>
                     <th scope="col">Status</th>
                     <th scope="col">Ordered By</th>
-                   
-                    <th scope="col" style = "width: 25rem">Actions</th>
+
+                    <th scope="col" style="width: 25rem">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
-                <?php
-                if ($query_run && $query_run->rowCount() > 0) {
-                  foreach ($query_run as $row) {
-                    $status = isset($row['status']) ? $row['status'] : 'pending';
-                    $disableEdit = $status === 'complete' ? 'disabled' : '';
-                    $rowColorClass = '';
+                  <?php
+                  if ($query_run && $query_run->rowCount() > 0) {
+                    foreach ($query_run as $row) {
+                      $status = isset($row['status']) ? $row['status'] : 'pending';
+                      $disableEdit = $status === 'complete' ? 'disabled' : '';
+                      $rowColorClass = '';
 
-                    switch ($status) {
-                      case 'complete':
-                        $rowColorClass = 'table-success';
-                        break;
-                      case 'incomplete':
-                        $rowColorClass = 'table-incomplete';
-                        break;
-                      case 'pending':
-                        $rowColorClass = 'table-pending';
-                        break;
-                      default:
-                        $rowColorClass = '';
+                      switch ($status) {
+                        case 'complete':
+                          $rowColorClass = 'table-success';
+                          break;
+                        case 'incomplete':
+                          $rowColorClass = 'table-incomplete';
+                          break;
+                        case 'pending':
+                          $rowColorClass = 'table-pending';
+                          break;
+                        default:
+                          $rowColorClass = '';
+                      }
+                      ?>
+                      <tr class="<?php echo htmlspecialchars($rowColorClass); ?>">
+                        <td hidden><?php echo htmlspecialchars($row['id']); ?></td>
+                        <td><?php echo htmlspecialchars($row['po_number']); ?></td>
+                        <td><?php echo htmlspecialchars($row['product_name']); ?></td>
+                        <td><?php echo htmlspecialchars($row['quantity']); ?></td>
+                        <td><?php echo htmlspecialchars($row['qty_received']); ?></td>
+                        <td><?php echo htmlspecialchars($row['supplier_name']); ?></td>
+                        <td><?php echo htmlspecialchars($status); ?></td>
+                        <td><?php echo htmlspecialchars(date('Y-m-d', strtotime($row['created_at']))); ?></td>
+                        <td>
+                          <button class="btn btn-info btn-sm view_data btn-view" data-bs-toggle="modal"
+                            data-bs-target="#viewModal"
+                            data-id="<?php echo htmlspecialchars($row['po_number']); ?>">View</button>
+
+                          <button class="btn btn-success btn-sm edit_data btn-edit" data-bs-toggle="modal"
+                            data-bs-target="#editModal" data-id="<?php echo htmlspecialchars($row['id']); ?>" <?php echo $disableEdit; ?>>Edit</button>
+                          <button class="btn btn-danger btn-sm delete_data btn-delete" data-bs-toggle="modal"
+                            data-bs-target="#deleteModal"
+                            data-id="<?php echo htmlspecialchars($row['id']); ?>">Delete</button>
+                        </td>
+                      </tr>
+                      <?php
                     }
-                    ?>
-                    <tr class="<?php echo htmlspecialchars($rowColorClass); ?>">
-                      <td hidden><?php echo htmlspecialchars($row['id']); ?></td>
-                      <td><?php echo htmlspecialchars($row['po_number']); ?></td>
-                      <td><?php echo htmlspecialchars($row['product_name']); ?></td>
-                      <td><?php echo htmlspecialchars($row['quantity']); ?></td>
-                      <td><?php echo htmlspecialchars($row['qty_received']); ?></td>
-                      <td><?php echo htmlspecialchars($row['supplier_name']); ?></td>
-                      <td><?php echo htmlspecialchars($status); ?></td>
-                      <td><?php echo htmlspecialchars(date('Y-m-d', strtotime($row['created_at']))); ?></td>
-                      <td>
-                        <button class="btn btn-info btn-sm view_data btn-view" data-bs-toggle="modal" data-bs-target="#viewModal"
-                          data-id="<?php echo htmlspecialchars($row['po_number']); ?>">View</button>
-
-                        <button class="btn btn-success btn-sm edit_data btn-edit" data-bs-toggle="modal"
-                          data-bs-target="#editModal" data-id="<?php echo htmlspecialchars($row['id']); ?>" <?php echo $disableEdit; ?>>Edit</button>
-                        <button class="btn btn-danger btn-sm delete_data btn-delete" data-bs-toggle="modal"
-                          data-bs-target="#deleteModal"
-                          data-id="<?php echo htmlspecialchars($row['id']); ?>">Delete</button>
-                      </td>
-                    </tr>
-                    <?php
+                  } else {
+                    echo "<tr><td colspan='10'>No Records Found</td></tr>";
                   }
-                } else {
-                  echo "<tr><td colspan='10'>No Records Found</td></tr>";
-                }
-                ?>
+                  ?>
                 </tbody>
               </table>
             </div>
@@ -432,20 +432,20 @@ try {
         }
       });
     });
-   $(document).on('click', '.view_data', function() {
-    var id = $(this).data('id');
-    
-    $.ajax({
+    $(document).on('click', '.view_data', function () {
+      var id = $(this).data('id');
+
+      $.ajax({
         url: 'po/view_order.php',
         method: 'POST',
         data: { id: id },
-        success: function(data) {
-            var order = JSON.parse(data);
-            if (order.error) {
-                alert(order.error);
-            } else {
-                // Populate modal with order details
-                $('#viewModal .modal-body').html(`
+        success: function (data) {
+          var order = JSON.parse(data);
+          if (order.error) {
+            alert(order.error);
+          } else {
+            // Populate modal with order details
+            $('#viewModal .modal-body').html(`
                     <p><strong>PO Number:</strong> ${order.po_number}</ <p><strong>Product Name:</strong> ${order.product_name}</p>
                     <p><strong>Quantity:</strong> ${order.quantity}</p>
                     <p><strong>Unit Price:</strong> ${order.unit_price}</p>
@@ -453,90 +453,90 @@ try {
                     <p><strong>Status:</strong> ${order.status}</p>
                     <p><strong>Created At:</strong> ${order.created_at}</p>
                 `);
-                $('#viewModal').modal('show');
-            }
+            $('#viewModal').modal('show');
+          }
         }
+      });
     });
-});
-$(document).on('click', '.edit_data', function() {
-    var id = $(this).data('id');
+    $(document).on('click', '.edit_data', function () {
+      var id = $(this).data('id');
 
-    $.ajax({
+      $.ajax({
         url: 'po/fetch_order.php',
         method: 'POST',
         data: { id: id },
-        success: function(data) {
-            var order = JSON.parse(data);
-            if (order.error) {
-                alert(order.error);
-            } else {
-                // Populate edit form with order details
-                $('#editModal #po_number').val(order.po_number);
-                $('#editModal #product_name').val(order.product_name);
-                $('#editModal #quantity').val(order.quantity);
-                $('#editModal #unit_price').val(order.unit_price);
-                $('#editModal #supplier_name').val(order.supplier_name);
-                $('#editModal #order_id').val(order.id);
-                $('#editModal').modal('show');
-            }
+        success: function (data) {
+          var order = JSON.parse(data);
+          if (order.error) {
+            alert(order.error);
+          } else {
+            // Populate edit form with order details
+            $('#editModal #po_number').val(order.po_number);
+            $('#editModal #product_name').val(order.product_name);
+            $('#editModal #quantity').val(order.quantity);
+            $('#editModal #unit_price').val(order.unit_price);
+            $('#editModal #supplier_name').val(order.supplier_name);
+            $('#editModal #order_id').val(order.id);
+            $('#editModal').modal('show');
+          }
         }
+      });
     });
-});
 
-$('#editModal #update_order').on('click', function() {
-    var id = $('#editModal #order_id').val();
-    var poNumber = $('#editModal #po_number').val();
-    var productName = $('#editModal #product_name').val();
-    var quantity = $('#editModal #quantity').val();
-    var unitPrice = $('#editModal #unit_price').val();
-    var supplierName = $('#editModal #supplier_name').val();
+    $('#editModal #update_order').on('click', function () {
+      var id = $('#editModal #order_id').val();
+      var poNumber = $('#editModal #po_number').val();
+      var productName = $('#editModal #product_name').val();
+      var quantity = $('#editModal #quantity').val();
+      var unitPrice = $('#editModal #unit_price').val();
+      var supplierName = $('#editModal #supplier_name').val();
 
-    $.ajax({
+      $.ajax({
         url: 'po/update_order.php',
         method: 'POST',
         data: {
-            id: id,
-            po_number: poNumber,
-            product_name: productName,
-            quantity: quantity,
-            unit_price: unitPrice,
-            supplier_name: supplierName
+          id: id,
+          po_number: poNumber,
+          product_name: productName,
+          quantity: quantity,
+          unit_price: unitPrice,
+          supplier_name: supplierName
         },
-        success: function(response) {
-            var res = JSON.parse(response);
-            if (res.success) {
-                alert('Order updated successfully!');
-                location.reload(); // Reload the page to see changes
-            } else {
-                alert(res.message);
-            }
+        success: function (response) {
+          var res = JSON.parse(response);
+          if (res.success) {
+            alert('Order updated successfully!');
+            location.reload(); // Reload the page to see changes
+          } else {
+            alert(res.message);
+          }
         }
+      });
     });
-});
-$(document).on('click', '.delete_data', function() {
-    var id = $(this).data('id');
-    $('#deleteModal #confirm_delete').data('id', id); // Store ID in the confirm button
-    $('#deleteModal').modal('show');
-});
+    $(document).on('click', '.delete_data', function () {
+      var id = $(this).data('id');
+      $('#deleteModal #confirm_delete').data('id', id); // Store ID in the confirm button
+      $('#deleteModal').modal('show');
+    });
 
-$('#deleteModal #confirm_delete').on('click', function() {
-    var id = $(this).data('id');
+    $('#deleteModal #confirm_delete').on('click', function () {
+      var id = $(this).data('id');
 
-    $.ajax({
+      $.ajax({
         url: 'po/delete_order.php',
         method: 'POST',
         data: { id: id },
-        success: function(response) {
-            var res = JSON.parse(response);
-            if (res.success) {
-                alert('Order deleted successfully!');
-                location.reload(); // Reload the page to see changes
-            } else {
-                alert(res.message);
-            }
+        success: function (response) {
+          var res = JSON.parse(response);
+          if (res.success) {
+            alert('Order deleted successfully!');
+            location.reload(); // Reload the page to see changes
+          } else {
+            alert(res.message);
+          }
         }
+      });
     });
-});
   </script>
 </body>
 

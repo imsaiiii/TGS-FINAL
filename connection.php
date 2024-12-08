@@ -1,9 +1,9 @@
  <?php
 
 $servername = 'localhost';
-$username = 'u350259501_thegoodshot';
-$password = '8Njs?JKs>Dm';
-$dbname = 'u350259501_tgs_inventory';
+$username = 'root';
+$password = '';
+$dbname = 'tgs_inventory';
 
 try {
     $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
