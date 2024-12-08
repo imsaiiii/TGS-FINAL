@@ -1,0 +1,144 @@
+
+body {
+  width: 100vw;
+  background-image: url('images/background-photo.jpg'); 
+  background-repeat: no-repeat;
+  background-size: cover;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 50vh;
+  min-height: 100vh;
+}
+
+.custom-container {
+  width: 45rem;
+  padding: 0;
+  border-radius: 5px;
+}
+.custom-left-box{
+  background-color: #F5F0E6;
+  height: 29rem;
+}
+
+.login-name {
+  font-size: 30px;
+  text-align: center;
+  font-weight: 600;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.form-label {
+  font-weight: 650;
+  font-size: 20px;
+}
+
+.form-control {
+  font-size: 19px;
+  margin-bottom: 5px;
+  width: 90%; 
+}
+
+.password-container {
+  position: relative;
+}
+
+.show-password-icon {
+  position: absolute;
+  right: 50px;
+  top: 70%;
+  transform: translateY(-30%);
+  cursor: pointer;
+  color: black;
+}
+
+.login-logo {
+  height: auto;
+  max-height: 80%;
+  width: 200px;
+  max-width: 90%;
+  border-radius: 50%;
+}
+
+.custom-btn-login{
+  margin-left: 80px;
+  text-align: center;
+  width: 50%;
+  border-radius: 20px;
+  border: none;
+  display: flex;
+  justify-content: center;
+  background-color: #D6CCC2;
+  color: black;
+  font-size: large;
+  font-weight: 600;
+  border: 1px solid gray;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.custom-btn-login:hover{
+  transform: translateY(-3px);
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+}
+
+
+@media (max-width: 768px) {
+  .container {
+    width: 80vw; 
+    height: auto; 
+    flex-direction: column; 
+  }
+
+  .left-container, .right-container {
+    width: 100%; 
+    padding: 20px;
+  }
+
+  .login-logo {
+    height: 120px;
+    width: 120px;
+  }
+
+  .btn-login {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  body{
+    width: 90vw;
+    height: 100vh;
+    padding-left: 20px;
+    background-image: url('images/background-photo.jpg'); 
+  }
+  .container {
+    width: 90vw;
+    margin: 30px auto;
+  }
+
+  .form-label {
+    font-size: 16px;
+  }
+
+  .form-control {
+    font-size: 16px;
+  }
+
+  .btn-login {
+    font-size: medium;
+    padding: 10px;
+  }
+  .btn-login:hover{
+    background-color: #83bcff;
+  }
+
+  .login-name {
+    font-size: 24px;
+  }
+
+  .login-logo {
+    height: 120px;
+    width: 120px;
+    margin-left: 80px;
+  }
+}

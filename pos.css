@@ -1,0 +1,320 @@
+Giancarlo Ganub
+body {
+    background-color: aliceblue;
+}
+
+.logo {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+}
+.icons{
+    width: 30px;
+    height: 30px;
+}
+
+.sidebar-color {
+    background-color: #fff7f0;
+    height: 100vh;
+    width:  340px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    box-shadow: #8d8d8d 0.2px 1.4px 1.2px 0.2px;
+    z-index: 1000;
+    overflow-y: auto;
+}
+
+.sidebar-heading {
+    background-color: #fff7f0;
+    color: black;
+    font-size: 18px;
+    font-weight: bold;
+    height: 80px;
+    margin: 15px;
+    border-bottom: black 2px solid;
+    text-transform: uppercase;
+    justify-content: center;
+}
+
+.btn-back {
+    color: black;
+    font-size: 15px;
+}
+.back-icon{
+    height: 30px;
+    width: 30px;
+}
+
+.btn-back:hover {
+    background-color: #b3b3b3;
+    color: black;
+    border-radius: 50%;
+}
+
+.list-group-item {
+    background-color: #fff7f0;
+    height: 50px;
+    font-weight: 650;
+    font-size: 17px;
+}
+
+.list-group-item:hover {
+    background-color: #d8cba8;
+    color: white;
+}
+
+#page-content-wrapper {
+    margin-left: 320px;
+    padding: 10px;
+    width: 100%;
+    height: 100vh;
+    box-sizing: border-box;
+    position: fixed;
+    display: flex;
+}
+.topnavbar-icons{
+    height: 24px;
+    width: 24px;
+    margin-right: 5px;
+    margin-bottom: 5px;
+}
+.user-icons{
+    height: 22px;
+    width: 22px;
+    margin-right: 5px;
+    margin-bottom: 5px;
+}
+.nav-link{
+    border-radius: 20px;
+}
+.nav-link:hover{
+    background-color: #d8cba8;
+    border-radius: 20px;
+}
+.dashboard-nav {
+    position: fixed;
+    width: calc(100% - 340px);
+    height: 64px;
+    top: 0;
+    left: 340px;
+    background-color: white !important;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    z-index: 1000;
+}
+#container{
+    width: 100rem;
+    background-color: #b2a189;
+    display: grid;
+    grid-template-columns: 65rem auto;
+    gap: 16px;
+    padding: 20px;
+    overflow-y: scroll;
+    height: calc(100vh - 40px);
+    box-sizing: border-box;
+}
+.order-card{
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    padding: 20px;
+}
+.name-text {
+    margin-left: 30px;
+    margin-top: 20px;
+    font-size: 35px;
+    font-weight: 600;
+    font-family: Arial, Helvetica, sans-serif;
+    color: #333333 ;
+}
+
+.coffee-card {
+    margin-top: 20px;
+    background-color: white;
+    display: flex;
+    text-align: center;
+    border: 1px solid #ccc;
+    padding: 5px;
+    border-radius: 5px;
+    position: relative;
+    width: 200px;
+    height: 270px;
+    margin-left: 30px;
+}
+
+.coffee-card img {
+    margin-top: 10px;
+    margin-left: 10px;
+    width: 120px;
+    height: 110px;
+    border-radius: 5px;
+    background-color: #eeeaea;
+}
+
+.coffee-name {
+    margin-top: 10px;
+    margin-left: 5px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: 800;
+    font-size: 20px;
+}
+.coffee-price {
+    font-weight: 500;
+    font-size: 20px;
+}
+
+
+.addtocart {
+    display: flex;
+    font-size: 18px;
+    font-weight: 500;
+    align-items: center;
+    justify-content: center;
+    background-color: #574C48;
+    color: #fffdf2;
+    border-radius: 40px;
+    width: 180px;
+    height: 30px;
+    margin-top: 20px;
+    margin-left: 5px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+}
+
+.addtocart:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+}
+
+.receipt {
+    position: fixed;
+    top: 130px;
+    right: 10px;
+    width: 400px;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+}
+.top-cart{
+    border-bottom: #333 1px solid;
+    color: black;
+    padding: 10px;
+    margin: 0px 20px 0px 20px;
+
+}
+.cart-name{
+    font-weight: 700;
+    color: black;
+    font-size: 35px;
+    text-align: center;
+}
+.order-name{
+    font-weight: 500;
+    font-size: 24px;
+    margin-left: 20px;
+    margin-top: 20px;
+}
+.btn-removeCart{
+    align-items: center;
+    border: none;
+    border-radius: 50%;
+}
+.btn-removeCart:hover{
+    background-color: red;
+    color: white;
+}
+.order-list {
+    width: 100%;
+    height: 400px;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    padding: 10px;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.1);
+}
+.order-number{
+    font-size: 20px;
+    height: 10px;
+    margin-top: 8px;
+    margin-left: 110px;
+}
+
+.total-price{
+    margin-top: 20px;
+    padding-left: 10px;
+    padding-top: 10px;
+    height: 150px;
+    font-weight: 500;
+}
+.btn-order{
+    width: 200px;
+    height: 40px;
+    border-radius: 10px;
+    font-weight: 600;
+    text-align: center;
+    margin-left: 75px;
+    background-color: #574C48;
+    color: white;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+}
+.btn-order:hover{
+    transform: translateY(-3px);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+}
+.total-amount{
+    margin-top: 20px;
+    font-size: 22px;
+}
+.order-img{
+    width: 50px;
+    height: 50px;
+    margin-right: 20px;
+}
+.name-item{
+    font-size: 18px;
+    width: 100px;
+    font-weight: 600;
+}
+.price-item{
+    font-size: 15px;
+    font-weight: 500;
+}
+.order-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.confirmOrder{
+    text-decoration: none;
+    width: 150px;
+    height: 40px;
+    background-color: #574C48;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+    color: white;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 600;
+    border: 1px solid #b2a189;
+    align-items: center;
+}
+.confirmOrder:hover{
+    transform: translateY(-3px);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+}
+.receipt-header{
+    text-align: center;
+    justify-content: center;
+}
