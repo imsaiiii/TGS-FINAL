@@ -2,20 +2,25 @@
 session_start();
 include('connection.php');
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['id'])) {
-    $id = $_POST['id'];
 
-    $stmt = $conn->prepare("SELECT * FROM purchase_orders WHERE id = :id");
+// Edit User
+if (isset($_POST['click_edit_btn'])) {
+    $id = $_POST['user_id'];
+    $fetch_query = "SELECT * FROM users WHERE id = :id";
+    $stmt = $conn->prepare($fetch_query);
     $stmt->bindParam(':id', $id);
     $stmt->execute();
 
     if ($stmt->rowCount() > 0) {
-        $order = $stmt->fetch(PDO::FETCH_ASSOC);
-        echo json_encode($order);
+        $arrayresult = [];
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            array_push($arrayresult, $row);
+        }
+        header('Content-Type: application/json');
+        echo json_encode($arrayresult);
     } else {
-        echo json_encode(['error' => 'No order found.']);
+        echo json_encode([]);
     }
-} else {
-    echo json_encode(['error' => 'Invalid request.']);
 }
+
 ?>

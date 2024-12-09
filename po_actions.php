@@ -2,104 +2,114 @@
 session_start();
 include('connection.php');
 
-// View Purchase Order Details
-if (isset($_POST['click_view_btn'])) {
-    $id = $_POST['user_id'];
-    $fetch_query = "SELECT purchase_orders.*, purchase_order_details.* 
-                    FROM purchase_orders
-                    LEFT JOIN purchase_order_details 
-                    ON purchase_orders.id = purchase_order_details.po_id 
-                    WHERE purchase_order_details.po_id = :id";
+if (isset($_POST['click__view_data_btn'])) {
+    $id = $_POST['order_id']; // This should be the ID of the purchase order detail
 
-    $stmt = $conn->prepare($fetch_query);
-    $stmt->bindParam(':id', $id, PDO::PARAM_INT);
-    $stmt->execute();
+    try {
+        // Use parameterized queries to prevent SQL injection
+        $fetch_query = "
+        SELECT 
+            pod.id AS pod_id,
+            pod.po_id,
+            po.po_number,
+            pod.product_name,
+            pod.unit_price,
+            pod.quantity,
+            pod.qty_received AS pod_qty_received,
+            pod.status AS pod_status,
+            pod.supplier_name,
+            pod.amount AS pod_amount,
+            po.created_at AS po_created_at,
+            po.qty_received AS po_qty_received,
+            po.acc_id,
+            po.total_amount AS po_total_amount,
+            po.received_date AS po_received_date
+        FROM 
+            purchase_order_details pod
+        JOIN 
+            purchase_orders po ON pod.po_id = po.id
+        WHERE 
+            pod.po_id = :po_id
+        ";  // Use parameterized query with placeholder
 
-    if ($stmt->rowCount() > 0) {
-        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            echo '
-            <h6>Product Name: ' . htmlspecialchars($row['product_name']) . '</h6>
-            <h6>Qty Ordered: ' . htmlspecialchars($row['quantity']) . '</h6>
-            <h6>Qty Received: ' . htmlspecialchars($row['qty_received']) . '</h6>
-            <h6>Supplier: ' . htmlspecialchars($row['supplier_name']) . '</h6>
-            <h6>Status: ' . htmlspecialchars($row['status']) . '</h6>
-            ';
+        // Prepare and execute the query
+        $stmt = $conn->prepare($fetch_query);
+        $stmt->bindParam(':po_id', $id, PDO::PARAM_INT); // Use named binding for clarity
+        $stmt->execute();
+
+        // Check if there are any results
+        if ($stmt->rowCount() > 0) {
+            $results = $stmt->fetchAll(PDO::FETCH_ASSOC);  // Fetch all results
+
+            foreach ($results as $row) {
+                echo '
+                <h6>Product Name: ' . htmlspecialchars($row['product_name']) . '</h6>
+                <h6>Qty Ordered: ' . htmlspecialchars($row['quantity']) . '</h6>
+                <h6>Qty Received: ' . htmlspecialchars($row['pod_qty_received']) . '</h6>
+                <h6>Supplier: ' . htmlspecialchars($row['supplier_name']) . '</h6>
+                <h6>Status: ' . htmlspecialchars($row['pod_status']) . '</h6>
+                <h6>PO Number: ' . htmlspecialchars($row['po_number']) . '</h6>
+                <h6>Total Amount: ' . htmlspecialchars($row['pod_amount']) . '</h6>
+                <br>
+                ';
+            }
+        } else {
+            echo '<h4>No records found</h4>';
         }
-    } else {
-        echo '<h4>No records found</h4>';
+    } catch (PDOException $e) {
+        // Handle any errors with the PDO query
+        echo '<h4>Error: ' . htmlspecialchars($e->getMessage()) . '</h4>';
     }
 }
 
-// Edit Purchase Order Detail
-if (isset($_POST['click_edit_btn'])) {
-    $po_detail_id = $_POST['po_detail_id'];
-    $arrayresult = [];
-
-    $fetch_query = "SELECT tbl_po.*, tbl_po_details.*
-                    FROM tbl_po
-                    LEFT JOIN tbl_po_details ON tbl_po.po_id = tbl_po_details.po_id
-                    WHERE tbl_po_details.po_detail_id = :po_detail_id";
-
-    $stmt = $conn->prepare($fetch_query);
-    $stmt->bindParam(':po_detail_id', $po_detail_id, PDO::PARAM_INT);
-    $stmt->execute();
-
-    if ($stmt->rowCount() > 0) {
-        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            array_push($arrayresult, $row);
-        }
-        header('Content-Type: application/json');
-        echo json_encode($arrayresult);
-    } else {
-        echo json_encode(['error' => 'No record found.']);
-    }
-}
-
-// Update Purchase Order Detail
+// Check if the form is submitted to update PO data
 if (isset($_POST['update_data'])) {
-    $po_detail_id = $_POST['po_detail_id'];
-    $new_qty_received = $_POST['qty_received'];
-    $status = ($_POST['quantity'] == $new_qty_received) ? 'complete' : 'incomplete';
+    $po_id = $_POST['po_id'];
+    $product_name = $_POST['product_name'];
+    $quantity = $_POST['quantity'];
+    $qty_received = $_POST['qty_received'];
+    $supplier_name = $_POST['supplier_name'];
+    $status = $_POST['status'];
 
-    // Get product name for stock update
-    $product_name_query = "SELECT product_name FROM tbl_po_details WHERE po_detail_id = :po_detail_id";
-    $stmt = $conn->prepare($product_name_query);
-    $stmt->bindParam(':po_detail_id', $po_detail_id, PDO::PARAM_INT);
+    // Fetch current qty_received and product_name from the purchase_order_details table
+    $query = "SELECT product_name, qty_received FROM purchase_order_details WHERE id = ?";
+    $stmt = $conn->prepare($query);
+    $stmt->bind_param("i", $po_id);
     $stmt->execute();
-    $row = $stmt->fetch(PDO::FETCH_ASSOC);
-    $product_name = $row['product_name'];
+    $result = $stmt->get_result();
+    $row = $result->fetch_assoc();
 
-    // Get initial qty_received for stock update
-    $initial_qty_query = "SELECT qty_received FROM tbl_po_details WHERE po_detail_id = :po_detail_id";
-    $stmt = $conn->prepare($initial_qty_query);
-    $stmt->bindParam(':po_detail_id', $po_detail_id, PDO::PARAM_INT);
-    $stmt->execute();
-    $initial_qty_row = $stmt->fetch(PDO::FETCH_ASSOC);
-    $initial_qty_received = $initial_qty_row['qty_received'];
+    if ($row) {
+        // Calculate the quantity difference
+        $initial_qty_received = $row['qty_received'];
+        $qty_difference = $qty_received - $initial_qty_received;
 
-    $qty_difference = $new_qty_received - $initial_qty_received;
+        // Update the purchase_order_details table
+        $update_query = "UPDATE purchase_order_details 
+                         SET product_name = ?, quantity = ?, qty_received = ?, status = ?, supplier_name = ? 
+                         WHERE id = ?";
+        $stmt = $conn->prepare($update_query);
+        $stmt->bind_param("siiisi", $product_name, $quantity, $qty_received, $status, $supplier_name, $po_id);
+        $stmt->execute();
 
-    // Update stock based on the quantity difference
-    $update_stock_query = "UPDATE tbl_products 
-                           SET stocks = stocks + :qty_difference
-                           WHERE product_name = :product_name";
+        // Update the inventory table to reflect the stock changes
+        $inventory_query = "UPDATE inventory SET total_measurement = CAST(total_measurement AS SIGNED) + ? 
+                            WHERE product_name = ?";
+        $stmt = $conn->prepare($inventory_query);
+        $stmt->bind_param("is", $qty_difference, $product_name);
+        $stmt->execute();
 
-    $stmt = $conn->prepare($update_stock_query);
-    $stmt->bindParam(':qty_difference', $qty_difference, PDO::PARAM_INT);
-    $stmt->bindParam(':product_name', $product_name, PDO::PARAM_STR);
-    $stmt->execute();
+        // If PO status is 'complete', update the status in the purchase_orders table
+        if ($status == 'complete') {
+            $update_po_query = "UPDATE purchase_orders SET qty_received = qty_received + ? WHERE id = ?";
+            $stmt = $conn->prepare($update_po_query);
+            $stmt->bind_param("ii", $qty_received, $po_id);
+            $stmt->execute();
+        }
 
-    // Update the quantity received and status of the order
-    $update_qty_received_query = "UPDATE tbl_po_details
-                                  SET qty_received = :qty_received, status = :status
-                                  WHERE po_detail_id = :po_detail_id";
-
-    $stmt = $conn->prepare($update_qty_received_query);
-    $stmt->bindParam(':qty_received', $new_qty_received, PDO::PARAM_INT);
-    $stmt->bindParam(':status', $status, PDO::PARAM_STR);
-    $stmt->bindParam(':po_detail_id', $po_detail_id, PDO::PARAM_INT);
-    $stmt->execute();
-
-    echo json_encode(['success' => true]);
+        echo "Data successfully updated!";
+    } else {
+        echo "Error: PO not found.";
+    }
 }
-?>
+

@@ -102,7 +102,6 @@ function addProduct() {
             // If the product does not exist, add a new row to the table
             console.log(`Adding product: ${productName}, Price: ${price}, Quantity: ${quantity}`);
             addToTable(productName, price, quantity, supplierName); // Pass supplier name to addToTable
-
         }
 
         updateTotalPrice(); // Update the total price after adding/updating
@@ -186,8 +185,6 @@ function saveTransaction() {
         products: gatherProducts()
     };
 
-    console.log("Transaction Data:", transactionData); // Log the transaction data
-
     $.ajax({
         url: 'save.php',
         method: 'POST',
@@ -197,7 +194,18 @@ function saveTransaction() {
             products: transactionData.products
         },
         success: function(response) {
-            // Handle response...
+            try {
+                const res = JSON.parse(response);
+                if (res.success) {
+                    alert('Transaction saved successfully!');
+                    window.location.href = 'purchase_order.php'; // Redirect after saving
+                } else {
+                    alert(res.message);
+                }
+            } catch (e) {
+                console.error('Invalid JSON response:', response);
+                alert('Error processing the response.');
+            }
         },
         error: function(jqXHR, textStatus, errorThrown) {
             console.error("AJAX error: ", textStatus, errorThrown);
@@ -212,15 +220,13 @@ function gatherProducts() {
     let products = [];
 
     for (let i = 0; i < rows.length; i++) {
-        const product = {
+        products.push({
             name: rows[i].cells[0].textContent,
             price: parseFloat(rows[i].cells[1].textContent),
             quantity: parseInt(rows[i].cells[2].getElementsByTagName('input')[0].value),
-            supplier: rows[i].cells[3].textContent
-        };
-        products.push(product);
+            supplier: rows[i].cells[3].textContent // Capture supplier name
+        });
     }
 
-    console.log("Gathered Products:", products); // Log the gathered products
     return JSON.stringify(products);
 }

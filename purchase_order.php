@@ -5,48 +5,72 @@
   <meta charset="UTF-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
   <title>The Good Shots</title>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 
-  <!-- DataTables CSS -->
-  <link rel="stylesheet" href="https://cdn.datatables.net/2.1.8/css/dataTables.bootstrap5.css">
-  <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
-  <script src="https://cdn.datatables.net/2.1.8/js/dataTables.js"></script>
-  <script src="https://cdn.datatables.net/2.1.8/js/dataTables.bootstrap5.js"></script>
+
+
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" />
-  <script>
-    $(document).ready(function () {
-      var table = $('#myTable').DataTable();
-
-    
-    });
-    
-  </script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.1.8/css/dataTables.bootstrap5.css">
+    <script src="https://cdn.datatables.net/2.1.8/js/dataTables.js"></script>
+    <script src="https://cdn.datatables.net/2.1.8/js/dataTables.bootstrap5.js"></script>
+    <link rel="stylesheet" href="dashboard.css" />
+ 
   <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
     integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
     crossorigin="anonymous" referrerpolicy="no-referrer" />
   <!-- Custom CSS -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
+
   <link rel="stylesheet" href="dashboard.css" />
+
   <script src="function/po_database.js"> </script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
 
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+  <!-- Bootstrap 5 CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="dashboard.css" />
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.1/css/jquery.dataTables.min.css">
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+    integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <!-- jQuery -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+  <!-- Bootstrap 5 JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+
+  <script src="function/po_database.js"> </script>
+  <!-- DataTables JS -->
+  <script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    $(document).ready(function () {
+      $('#myTable').DataTable();
+    });
+  </script>
 </head>
 
 <body>
   <?php
   session_start();
   include('connection.php');
+  $qty_received = isset($_POST['qty_received']) ? $_POST['qty_received'] : null;
 
-  $query = "SELECT po.id, po.po_number, po.created_at, po.qty_received, pod.quantity, pod.product_name, pod.unit_price, pod.supplier_name, pod.status
-            FROM purchase_orders po
-            LEFT JOIN purchase_order_details pod ON po.id = pod.po_id";
-
-  $query_run = $conn->query($query);
   ?>
   <!-- Purchase Order Modal -->
   <div class="modal fade" id="purchaseOrderModal" tabindex="-1" role="dialog" aria-labelledby="purchaseOrderLabel"
@@ -69,7 +93,7 @@
             <label for="supplier"><b>Supplier</b></label>
             <select class="form-control" id="supplier" name="supplier" required onchange="loadProducts()">
               <option value="">-- Select Supplier --</option>
-              <<?php
+              <?php
               try {
 
                 include 'connection.php';
@@ -136,6 +160,9 @@
     </div>
   </div>
 
+
+
+
   <!-- Confirmation Modal -->
   <div id="popupForm" class="modal fade" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
@@ -159,73 +186,92 @@
       </div>
     </div>
   </div>
-  <!-- Edit Order Modal -->
-  <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="editModalLabel">Edit Purchase Order</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
+
+  <!-- Modal HTML (Bootstrap modal) -->
+<div class="modal fade" id="editdata" tabindex="-1" aria-labelledby="editdataLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="editdataLabel">EDIT DATA</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <!-- Form for editing -->
+            <form id="updateForm" action="po_actions.php" method="POST">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <!-- PO ID, Product Name, and Quantity Ordered are read-only -->
+                            <div class="form-group mb-3">
+                                <label for="po_id">PO ID</label>
+                                <input type="text" class="form-control" id="po_id" name="po_id" readonly>
+                            </div>
+
+                            <div class="form-group mb-3">
+                                <label for="product_name">Product Name</label>
+                                <input type="text" class="form-control" id="product_name" name="product_name" readonly>
+                            </div>
+
+                            <div class="form-group mb-3">
+                                <label for="quantity">Qty Ordered</label>
+                                <input type="number" class="form-control" id="quantity" name="quantity" readonly>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group mb-3">
+                                <label for="qty_received">Qty Received</label>
+                                <input type="number" class="form-control" id="qty_received" name="qty_received" required>
+                            </div>
+
+                            <div class="form-group mb-3">
+                                <label for="supplier_name">Supplier</label>
+                                <input type="text" class="form-control" id="supplier_name" name="supplier_name" readonly>
+                            </div>
+
+                            <div class="form-group mb-3">
+                                <label for="status">Status</label>
+                                <input type="text" class="form-control" name="status" id="status">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" name="update_data" class="btn btn-primary">Update</button>
+                </div>
+            </form>
         </div>
-        <div class="modal-body">
-          <input type="hidden" id="order_id">
-          <div class="form-group">
-            <label for="po_number">PO Number</label>
-            <input type="text" class="form-control" id="po_number" required>
-          </div>
-          <div class="form-group">
-            <label for="product_name">Product Name</label>
-            <input type="text" class="form-control" id="product_name" required>
-          </div>
-          <div class="form-group">
-            <label for="quantity">Quantity</label>
-            <input type="number" class="form-control" id="quantity" required>
-          </div>
-          <div class="form-group">
-            <label for="unit_price">Unit Price</label>
-            <input type="number" class="form-control" id="unit_price" required>
-          </div>
-          <div class="form-group">
-            <label for="supplier_name">Supplier Name</label>
-            <input type="text" class="form-control" id="supplier_name" required>
-          </div>
-        </div>
+    </div>
+</div>
+
+
+
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary" id="update_order">Update Order</button>
+          <button id="update_data" class="btn btn-primary">Update</button>
         </div>
       </div>
     </div>
   </div>
-  <!-- View Order Modal -->
-  <div class="modal fade" id="viewModal" tabindex="-1" role="dialog" aria-labelledby="viewModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="viewModalLabel">View Purchase Order</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
+  <div id="view_items" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">View Order Details</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body view_item">
+                <!-- Dynamic content will be injected here -->
+            </div>
         </div>
-        <div class="modal-body">
-          <p><strong>PO Number:</strong> <span id="view_po_number"></span></p>
-          <p><strong>Product Name:</strong> <span id="view_product_name"></span></p>
-          <p><strong>Quantity:</strong> <span id="view_quantity"></span></p>
-          <p><strong>Unit Price:</strong> <span id="view_unit_price"></span></p>
-          <p><strong>Supplier Name:</strong> <span id="view_supplier_name"></span></p>
-          <p><strong>Status:</strong> <span id="view_status"></span></p>
-          <p><strong>Created At:</strong> <span id="view_created_at"></span></p>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        </div>
-      </div>
     </div>
-  </div>
+</div>
+
+
   <div class="d-flex content">
     <div id="sidebar" class="sidebar-color">
       <div class="sidebar-heading">
@@ -309,6 +355,7 @@
           </ul>
         </div>
       </nav>
+
       <div class="container-responsive mt-5">
         <div class="row justify-content-center">
           <div class="col-sm-12 col-lg-20">
@@ -346,12 +393,16 @@
                     <th scope="col">Supplier</th>
                     <th scope="col">Status</th>
                     <th scope="col">Ordered By</th>
-
                     <th scope="col" style="width: 25rem">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
                   <?php
+                  $query = "SELECT po.id, po.po_number, po.created_at, po.qty_received, pod.quantity, pod.product_name, pod.unit_price, pod.supplier_name, pod.status
+                  FROM purchase_orders po
+                  LEFT JOIN purchase_order_details pod ON po.id = pod.po_id";
+
+                  $query_run = $conn->query($query);
                   if ($query_run && $query_run->rowCount() > 0) {
                     foreach ($query_run as $row) {
                       $status = isset($row['status']) ? $row['status'] : 'pending';
@@ -372,8 +423,9 @@
                           $rowColorClass = '';
                       }
                       ?>
-                      <tr class="<?php echo htmlspecialchars($rowColorClass); ?>">
-                        <td hidden><?php echo htmlspecialchars($row['id']); ?></td>
+
+                      <tr class="<?php echo $rowColorClass; ?>">
+                        <td hidden class="order_id"><?php echo htmlspecialchars($row['id']); ?></td>
                         <td><?php echo htmlspecialchars($row['po_number']); ?></td>
                         <td><?php echo htmlspecialchars($row['product_name']); ?></td>
                         <td><?php echo htmlspecialchars($row['quantity']); ?></td>
@@ -382,21 +434,18 @@
                         <td><?php echo htmlspecialchars($status); ?></td>
                         <td><?php echo htmlspecialchars(date('Y-m-d', strtotime($row['created_at']))); ?></td>
                         <td>
-                          <button class="btn btn-info btn-sm view_data btn-view" data-bs-toggle="modal"
-                            data-bs-target="#viewModal"
-                            data-id="<?php echo htmlspecialchars($row['po_number']); ?>">View</button>
-
-                          <button class="btn btn-success btn-sm edit_data btn-edit" data-bs-toggle="modal"
-                            data-bs-target="#editModal" data-id="<?php echo htmlspecialchars($row['id']); ?>" <?php echo $disableEdit; ?>>Edit</button>
-                          <button class="btn btn-danger btn-sm delete_data btn-delete" data-bs-toggle="modal"
-                            data-bs-target="#deleteModal"
-                            data-id="<?php echo htmlspecialchars($row['id']); ?>">Delete</button>
+                          <div class="modal-footer d-flex justify-content-end">
+                            <button class="btn btn-info btn-sm view_data" data-bs-toggle="modal"
+                              data-bs-target="#view_items">View</button>
+                            <button class="btn btn-success btn-sm edit_data" data-bs-toggle="modal"
+                              data-bs-target="#editData" data-id="<?php echo htmlspecialchars($row['id']); ?>" <?php echo $disableEdit; ?>>Edit</button>
+                          </div>
                         </td>
                       </tr>
                       <?php
                     }
                   } else {
-                    echo "<tr><td colspan='10'>No Records Found</td></tr>";
+                    echo "<tr><td colspan='9'>No Records Found</td></tr>";
                   }
                   ?>
                 </tbody>
@@ -409,7 +458,7 @@
   </div>
 
   <script>
-    $(document).ready(function () {
+$(document).ready(function () {
       $("#supplier-toggle").click(function (e) {
         e.preventDefault();
         $("#supplier-submenu").slideToggle();
@@ -432,111 +481,156 @@
         }
       });
     });
-    $(document).on('click', '.view_data', function () {
-      var id = $(this).data('id');
+$(document).ready(function () {
+  
+    $(document).on('click', '.view_data', function(e){
+  e.preventDefault();
 
-      $.ajax({
-        url: 'po/view_order.php',
-        method: 'POST',
-        data: { id: id },
-        success: function (data) {
-          var order = JSON.parse(data);
-          if (order.error) {
-            alert(order.error);
-          } else {
-            // Populate modal with order details
-            $('#viewModal .modal-body').html(`
-                    <p><strong>PO Number:</strong> ${order.po_number}</ <p><strong>Product Name:</strong> ${order.product_name}</p>
-                    <p><strong>Quantity:</strong> ${order.quantity}</p>
-                    <p><strong>Unit Price:</strong> ${order.unit_price}</p>
-                    <p><strong>Supplier Name:</strong> ${order.supplier_name}</p>
-                    <p><strong>Status:</strong> ${order.status}</p>
-                    <p><strong>Created At:</strong> ${order.created_at}</p>
-                `);
-            $('#viewModal').modal('show');
-          }
-        }
-      });
+  console.log("View button clicked");
+
+  var order_id = $(this).closest('tr').children('td:first').text();
+  console.log("User ID:", order_id);
+
+  $.ajax({
+    method: "POST",
+    url: "po_actions.php",
+    data: {
+      'click__view_data_btn': true,
+      'order_id': order_id,
+    },
+    success: function(response){
+      console.log("AJAX success:", response);
+      $('.view_item').html(response);
+      $('#view_items').modal('show');
+    },
+    error: function(xhr, status, error) {
+      console.error("AJAX error:", error);
+    }
+  });
+  });
+  
+});
+
+
+$(document).ready(function () {
+
+// Handle the "Edit" button click
+$(document).on('click', '.edit_data', function(e) {
+  e.preventDefault();
+
+  var order_id = $(this).data('po-id'); // Get the PO ID from the button's data attribute
+  console.log("Edit button clicked, PO ID:", order_id);
+
+  // Simulating data pre-population (you can replace with real data fetching if needed)
+  // Here you can fill the modal form with values that will be updated.
+  $('#editdata').find('input[name="po_id"]').val(order_id);
+  $('#editdata').find('input[name="product_name"]').val("Sample Product");  // Example data
+  $('#editdata').find('input[name="quantity"]').val(100);  // Example data
+  $('#editdata').find('input[name="qty_received"]').val(0);  // Example data
+  $('#editdata').find('input[name="supplier_name"]').val("Sample Supplier");  // Example data
+  $('#editdata').find('input[name="status"]').val("Pending");  // Example data
+
+  // Show the modal for editing
+  $('#editdata').modal('show');
+});
+
+// Submit the form data to update
+$('#updateForm').on('submit', function(e) {
+  e.preventDefault();
+
+  var formData = $(this).serialize(); // Serialize form data for AJAX
+
+  $.ajax({
+    method: "POST",
+    url: "po_actions.php", // PHP file that handles the update
+    data: formData,
+    success: function(response) {
+      alert('Data successfully updated!');
+      $('#editdata').modal('hide');
+      location.reload(); // Optionally, refresh the page or update the view
+    },
+    error: function(xhr, status, error) {
+      console.error("AJAX error:", error);
+    }
+  });
+});
+
+});
+
+$(document).ready(function () {
+    // Handle the "Edit" button click
+    $(document).on('click', '.edit_data', function(e) {
+        e.preventDefault();
+
+        var po_id = $(this).data('po-id'); // Get the PO ID from the button's data attribute
+        console.log("Edit button clicked, PO ID:", po_id);
+
+        // Send an AJAX request to get the current data for the PO
+        $.ajax({
+            method: "POST",
+            url: "po_actions.php", // The PHP file that handles getting PO data
+            data: { click_edit_btn: true, po_id: po_id },
+            success: function(response) {
+                if(response) {
+                    var data = JSON.parse(response); // Parse JSON response
+
+                    // Populate the modal form with data
+                    $('#editdata').find('input[name="po_id"]').val(data.id);
+                    $('#editdata').find('input[name="product_name"]').val(data.product_name);
+                    $('#editdata').find('input[name="quantity"]').val(data.quantity);
+                    $('#editdata').find('input[name="qty_received"]').val(data.qty_received);
+                    $('#editdata').find('input[name="supplier_name"]').val(data.supplier_name);
+                    $('#editdata').find('input[name="status"]').val(data.status);
+
+                    // Show the modal for editing
+                    $('#editdata').modal('show');
+                } else {
+                    alert('Error fetching PO data.');
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error("AJAX error:", error);
+            }
+        });
     });
-    $(document).on('click', '.edit_data', function () {
-      var id = $(this).data('id');
 
-      $.ajax({
-        url: 'po/fetch_order.php',
-        method: 'POST',
-        data: { id: id },
-        success: function (data) {
-          var order = JSON.parse(data);
-          if (order.error) {
-            alert(order.error);
-          } else {
-            // Populate edit form with order details
-            $('#editModal #po_number').val(order.po_number);
-            $('#editModal #product_name').val(order.product_name);
-            $('#editModal #quantity').val(order.quantity);
-            $('#editModal #unit_price').val(order.unit_price);
-            $('#editModal #supplier_name').val(order.supplier_name);
-            $('#editModal #order_id').val(order.id);
-            $('#editModal').modal('show');
-          }
-        }
-      });
+    // Submit the form data to update
+    $('#updateForm').on('submit', function(e) {
+        e.preventDefault();
+
+        var formData = $(this).serialize(); // Serialize form data for AJAX
+
+        $.ajax({
+            method: "POST",
+            url: "po_actions.php", // PHP file that handles the update
+            data: formData,
+            success: function(response) {
+                alert('Data successfully updated!');
+                $('#editdata').modal('hide');
+                location.reload(); // Optionally, refresh the page or update the view
+            },
+            error: function(xhr, status, error) {
+                console.error("AJAX error:", error);
+            }
+        });
     });
+});
 
-    $('#editModal #update_order').on('click', function () {
-      var id = $('#editModal #order_id').val();
-      var poNumber = $('#editModal #po_number').val();
-      var productName = $('#editModal #product_name').val();
-      var quantity = $('#editModal #quantity').val();
-      var unitPrice = $('#editModal #unit_price').val();
-      var supplierName = $('#editModal #supplier_name').val();
 
-      $.ajax({
-        url: 'po/update_order.php',
-        method: 'POST',
-        data: {
-          id: id,
-          po_number: poNumber,
-          product_name: productName,
-          quantity: quantity,
-          unit_price: unitPrice,
-          supplier_name: supplierName
-        },
-        success: function (response) {
-          var res = JSON.parse(response);
-          if (res.success) {
-            alert('Order updated successfully!');
-            location.reload(); // Reload the page to see changes
-          } else {
-            alert(res.message);
-          }
-        }
-      });
-    });
-    $(document).on('click', '.delete_data', function () {
-      var id = $(this).data('id');
-      $('#deleteModal #confirm_delete').data('id', id); // Store ID in the confirm button
-      $('#deleteModal').modal('show');
-    });
 
-    $('#deleteModal #confirm_delete').on('click', function () {
-      var id = $(this).data('id');
 
-      $.ajax({
-        url: 'po/delete_order.php',
-        method: 'POST',
-        data: { id: id },
-        success: function (response) {
-          var res = JSON.parse(response);
-          if (res.success) {
-            alert('Order deleted successfully!');
-            location.reload(); // Reload the page to see changes
-          } else {
-            alert(res.message);
-          }
-        }
-      });
-    });
+
+
+
+
+
+
+
+
+  
+
+
+
   </script>
 </body>
 
